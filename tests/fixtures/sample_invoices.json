@@ -1,0 +1,67 @@
+[
+  {
+    "invoice_number": "S-001",
+    "date": "2026-01-10",
+    "amount": 10000.0,
+    "customer_name": "Local Retailer",
+    "vendor_name": null,
+    "is_purchase": false,
+    "gstin": "27AABCU9603R1ZM",
+    "gst_rate": 18.0,
+    "place_of_supply": "Maharashtra",
+    "supply_type": "B2B",
+    "hsn_sac": "998314"
+  },
+  {
+    "invoice_number": "S-002",
+    "date": "2026-01-12",
+    "amount": 5000.0,
+    "customer_name": "Karnataka Buyer",
+    "vendor_name": null,
+    "is_purchase": false,
+    "gstin": "29AABCU9603R1Z5",
+    "gst_rate": 18.0,
+    "place_of_supply": "Karnataka",
+    "supply_type": "B2B",
+    "hsn_sac": "998314"
+  },
+  {
+    "invoice_number": "S-003",
+    "date": "2026-01-14",
+    "amount": 800.0,
+    "customer_name": "Walk-in Customer",
+    "vendor_name": null,
+    "is_purchase": false,
+    "gstin": null,
+    "gst_rate": 5.0,
+    "place_of_supply": "Maharashtra",
+    "supply_type": "B2C",
+    "hsn_sac": "6109"
+  },
+  {
+    "invoice_number": "P-001",
+    "date": "2026-01-08",
+    "amount": 2000.0,
+    "customer_name": "",
+    "vendor_name": "Cloud Vendor Pvt Ltd",
+    "is_purchase": true,
+    "gstin": "27AABCU9603R1ZM",
+    "gst_rate": 18.0,
+    "place_of_supply": "Maharashtra",
+    "supply_type": "B2B",
+    "hsn_sac": "998313"
+  },
+  {
+    "invoice_number": "P-002",
+    "date": "2026-01-09",
+    "amount": 1500.0,
+    "customer_name": "",
+    "vendor_name": "Unknown Supplier",
+    "is_purchase": true,
+    "gstin": null,
+    "gst_rate": 18.0,
+    "place_of_supply": "Maharashtra",
+    "supply_type": "B2B",
+    "hsn_sac": null
+  }
+]

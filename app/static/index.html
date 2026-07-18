@@ -3,80 +3,229 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Deployment starter</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f5f5f5;
-      color: #1a1a1a;
-    }
-
-    main {
-      text-align: center;
-      padding: 2rem;
-    }
-
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 0.75rem;
-    }
-
-    p {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    #status {
-      font-size: 0.95rem;
-      margin-top: 1rem;
-    }
-
-    .ok {
-      color: #15803d;
-    }
-
-    .error {
-      color: #b91c1c;
-    }
-  </style>
+  <title>LedgerAI — Virtual CA</title>
+  <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-  <main>
-    <h1>Deployment starter</h1>
-    <p>Deployment starter is live</p>
-    <p id="status">Checking backend…</p>
-  </main>
-  <script>
-    const statusEl = document.getElementById("status");
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">LA</div>
+        <div>
+          <h1>LedgerAI</h1>
+          <p>Virtual CA for Indian SMEs</p>
+        </div>
+      </div>
+      <nav id="main-nav">
+        <button class="nav-btn" data-view="upload">Get started</button>
+        <button class="nav-btn" data-view="dashboard" data-requires-data="true">Dashboard</button>
+        <button class="nav-btn" data-view="invoices" data-requires-data="true">Invoices</button>
+        <button class="nav-btn" data-view="transactions" data-requires-data="true">Transactions</button>
+        <button class="nav-btn" data-view="reconcile" data-requires-data="true">Reconcile</button>
+        <button class="nav-btn" data-view="actions" data-requires-data="true">Action Center <span id="action-badge" class="badge hidden">0</span></button>
+        <button class="nav-btn" data-view="chat" data-requires-data="true">AI Assistant</button>
+      </nav>
+      <div class="sidebar-footer">
+        <label for="period">Reporting period</label>
+        <input id="period" type="month">
+        <button id="reset-btn" class="secondary">Clear all data</button>
+      </div>
+    </aside>
 
-    fetch("/api/health")
-      .then((response) => {
-        if (!response.ok) throw new Error("Bad response");
-        return response.json();
-      })
-      .then((data) => {
-        if (data.status === "ok") {
-          statusEl.textContent = "Backend connected";
-          statusEl.className = "ok";
-        } else {
-          throw new Error("Unexpected status");
-        }
-      })
-      .catch(() => {
-        statusEl.textContent = "Backend unreachable";
-        statusEl.className = "error";
-      });
-  </script>
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <h2 id="view-title">Get started</h2>
+          <p id="view-subtitle" class="subtitle">Upload your books to begin.</p>
+        </div>
+        <span id="status-pill" class="pill">Connecting…</span>
+      </header>
+
+      <div id="setup-banner" class="setup-banner hidden">
+        <div>
+          <strong>Setup incomplete</strong>
+          <p id="setup-banner-text">Upload invoices and a bank CSV to unlock analytics.</p>
+        </div>
+        <button id="setup-banner-btn" class="secondary">Go to upload</button>
+      </div>
+
+      <section id="upload" class="view active">
+        <div class="hero panel">
+          <h3>Bring your books into LedgerAI</h3>
+          <p class="hint">Start by uploading your source documents. Nothing is preloaded — all GST, TDS, and reconciliation insights are computed from your files.</p>
+          <div class="setup-steps">
+            <div class="setup-step" id="step-invoices">
+              <span class="step-number">1</span>
+              <div>
+                <strong>Upload invoices</strong>
+                <p>PDF, image, or JSON with OCR extraction.</p>
+              </div>
+            </div>
+            <div class="setup-step" id="step-transactions">
+              <span class="step-number">2</span>
+              <div>
+                <strong>Upload bank CSV</strong>
+                <p>Date, description, amount, direction, vendor, PAN.</p>
+              </div>
+            </div>
+            <div class="setup-step" id="step-dashboard">
+              <span class="step-number">3</span>
+              <div>
+                <strong>Review dashboard</strong>
+                <p>GST liability, TDS gap, matches, and compliance actions.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel upload-panel">
+            <div class="panel-head">
+              <h3>Invoices</h3>
+              <span class="tag">OCR supported</span>
+            </div>
+            <p class="hint">PDF or image invoices are parsed with Gemini OCR. JSON uploads skip OCR.</p>
+            <label class="dropzone">
+              <input type="file" id="invoice-file" accept=".json,.pdf,.png,.jpg,.jpeg,.webp,.txt" hidden>
+              <span id="invoice-file-label">Choose invoice file</span>
+            </label>
+            <div class="button-row">
+              <button id="preview-ocr" class="secondary">Preview extraction</button>
+              <button id="upload-invoices">Save to ledger</button>
+            </div>
+            <div id="ocr-preview" class="ocr-preview hidden"></div>
+          </div>
+
+          <div class="panel upload-panel">
+            <div class="panel-head">
+              <h3>Bank transactions</h3>
+              <span class="tag">CSV</span>
+            </div>
+            <p class="hint">Required columns: date, description, amount, direction, vendor_name, pan_available</p>
+            <label class="dropzone">
+              <input type="file" id="transaction-file" accept=".csv" hidden>
+              <span id="transaction-file-label">Choose bank CSV</span>
+            </label>
+            <button id="upload-transactions">Import transactions</button>
+          </div>
+        </div>
+
+        <div id="upload-status" class="upload-status hidden"></div>
+      </section>
+
+      <section id="dashboard" class="view">
+        <div id="dashboard-empty" class="empty-state hidden"></div>
+        <div id="dashboard-content" class="hidden">
+          <div class="section-head">
+            <h3>GST overview</h3>
+            <p class="hint">Computed from uploaded invoices for the selected period.</p>
+          </div>
+          <div class="cards gst-cards" id="gst-cards"></div>
+
+          <div class="section-head">
+            <h3>TDS overview</h3>
+            <p class="hint">Deductible vs deposited TDS from categorized bank debits.</p>
+          </div>
+          <div class="cards tds-cards" id="tds-cards"></div>
+          <div class="panel" id="tds-breakdown-panel">
+            <h3>TDS by section</h3>
+            <table>
+              <thead><tr><th>Section</th><th>Amount</th></tr></thead>
+              <tbody id="tds-breakdown-rows"></tbody>
+            </table>
+          </div>
+
+          <div class="grid-2">
+            <div class="panel">
+              <h3>Reconciliation</h3>
+              <div class="cards compact-cards" id="match-cards"></div>
+            </div>
+            <div class="panel">
+              <h3>Compliance calendar</h3>
+              <ul id="deadlines" class="list"></ul>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h3>AI monthly summary</h3>
+              <button id="refresh-summary" class="secondary">Generate summary</button>
+            </div>
+            <p id="ai-summary" class="summary-text">Upload complete? Generate a plain-English summary for this period.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="invoices" class="view">
+        <div id="invoices-empty" class="empty-state hidden"></div>
+        <div class="panel table-panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice #</th><th>Date</th><th>Party</th><th>Taxable amount</th><th>GST rate</th><th>GSTIN</th><th>Type</th>
+              </tr>
+            </thead>
+            <tbody id="invoice-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="transactions" class="view">
+        <div id="transactions-empty" class="empty-state hidden"></div>
+        <div class="panel table-panel">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th><th>Description</th><th>Amount</th><th>Direction</th><th>Category</th>
+              </tr>
+            </thead>
+            <tbody id="transaction-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="reconcile" class="view">
+        <div id="reconcile-empty" class="empty-state hidden"></div>
+        <div class="grid-2 reconcile-grid">
+          <div class="panel">
+            <h3>Sales invoice matches</h3>
+            <div id="match-list" class="stack"></div>
+          </div>
+          <div class="panel">
+            <h3>Review match</h3>
+            <div id="match-detail" class="stack muted">Select an invoice match to review the suggested bank transaction.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="actions" class="view">
+        <div id="actions-empty" class="empty-state hidden"></div>
+        <div id="action-list" class="stack"></div>
+      </section>
+
+      <section id="chat" class="view">
+        <div id="chat-empty" class="empty-state hidden"></div>
+        <div class="grid-2 chat-grid">
+          <div class="panel chat-panel">
+            <div id="chat-messages" class="chat-messages"></div>
+            <div class="chat-input-row">
+              <input id="chat-input" type="text" placeholder="Ask about GST liability, TDS gap, or deadlines…">
+              <button id="chat-send">Send</button>
+            </div>
+            <div class="chips">
+              <button class="chip" data-prompt="Explain my GST liability this month">Explain GST</button>
+              <button class="chip" data-prompt="What is my TDS gap and what should I deposit?">TDS gap</button>
+              <button class="chip" data-prompt="What compliance deadlines are coming up?">Deadlines</button>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Current period snapshot</h3>
+            <div id="chat-context" class="stack muted"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="/static/js/app.js"></script>
 </body>
 </html>

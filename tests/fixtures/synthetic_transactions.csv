@@ -1,0 +1,14 @@
+date,description,amount,direction,vendor_name,pan_available
+2026-01-04,NEFT CR SHARMA ELECTRONICS PAYMENT,25000.00,credit,,
+2026-01-09,UPI/CR/PATEL TRADERS INV S102,12000.00,credit,,
+2026-01-15,CASH DEPOSIT WALKIN SALES,3500.00,credit,,
+2026-01-19,NEFT BRIGHT OFFICE SUPPLIES,8400.00,credit,,
+2026-01-06,Office rent January 2026,55000.00,debit,Shree Properties,false
+2026-01-10,Civil contractor renovation bill,82000.00,debit,BuildRight Contractors,true
+2026-01-12,CA consulting fees Q3 review,45000.00,debit,Patel & Co,true
+2026-01-13,UPI-8844221100-ZOMATO,680.00,debit,,
+2026-01-16,UPI-7722110033-SWIGGY,420.00,debit,,
+2026-01-17,AMAZON WEB SERVICES INDIA,9440.00,debit,Amazon Web Services India,true
+2026-01-20,TDS challan 281 January,8500.00,debit,Income Tax Dept,true
+2026-01-21,Netflix Subscription,649.00,debit,,
+2026-01-23,Miscellaneous expense,1250.00,debit,,

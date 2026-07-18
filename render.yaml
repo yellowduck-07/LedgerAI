@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: replace-with-your-service-name
+    name: ledgerai
     runtime: python
     plan: free
     autoDeploy: true
@@ -10,3 +10,5 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.12"
+      - key: GEMINI_API_KEY
+        sync: false

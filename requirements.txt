@@ -1,2 +1,10 @@
 fastapi
 uvicorn[standard]
+google-generativeai
+pydantic
+sqlalchemy
+python-multipart
+httpx
+pypdf
+fpdf2
+pillow
